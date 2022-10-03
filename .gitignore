@@ -1,6 +1,7 @@
 .virtualenvs
 venv
 main.py
+urls.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
