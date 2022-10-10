@@ -11,7 +11,9 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
+import logging
 
+logging.basicConfig(filename="//Users/emre/Documents/GitHub/crypto_scraping_project/scraper.log",level=logging.DEBUG)
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
 # %%
