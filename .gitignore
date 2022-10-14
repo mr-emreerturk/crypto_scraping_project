@@ -1,8 +1,8 @@
 .virtualenvs
 venv
-main.py
 urls.csv
 credentials.py
+bug.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
