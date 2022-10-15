@@ -2,17 +2,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-
-# Rest
-from bs4 import BeautifulSoup
-import time
-import pandas as pd
 import datetime
-import h5py
-import numpy as np
 
 # Global settings for the driver
 chrome_options = Options()

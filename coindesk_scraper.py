@@ -2,23 +2,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-
-
-# Rest
-from bs4 import BeautifulSoup
-import time
-import pandas as pd
 import datetime
-import h5py
-import numpy as np
-
-from operations import Operations
 
 # Global settings for the driver
 chrome_options = Options()
