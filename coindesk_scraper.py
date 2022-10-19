@@ -18,8 +18,6 @@ import datetime
 import h5py
 import numpy as np
 
-from operations import Operations
-
 # Global settings for the driver
 chrome_options = Options()
 chrome_options.add_experimental_option(
