@@ -1,4 +1,4 @@
-#%% Selenium imports
+# Selenium imports
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -14,7 +14,7 @@ chrome_options.add_experimental_option(
     "detach", True
 )  # keeps driver open until manual termination
 
-#%%
+#
 class CoinDeskScraper:
     def __init__(self):
         super().__init__()
