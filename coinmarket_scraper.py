@@ -12,6 +12,7 @@ from selenium.common.exceptions import (
 )
 import datetime
 
+
 # Global settings for the driver
 chrome_options = Options()
 chrome_options.add_experimental_option(
