@@ -10,6 +10,8 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     StaleElementReferenceException,
 )
+import datetime
+
 
 # Global settings for the driver
 chrome_options = Options()
@@ -103,6 +105,7 @@ class CoinMarketCapScraper:
                 except StaleElementReferenceException:
                     pass
 
+                date = datetime.datetime.now().strftime("%D")
                 github_commits = self.driver.find_element(
                     By.XPATH,
                     '//*[@id="__next"]/div/div[1]/div[2]/div/div[3]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]',
@@ -133,6 +136,7 @@ class CoinMarketCapScraper:
                 )
 
                 list = [
+                    date,
                     github_commits.text,
                     github_stars.text,
                     github_forks.text,
