@@ -46,9 +46,8 @@ class CoinDeskScraper:
                 By.XPATH,
                 '//*[@id="queryly_advanced_container"]/div[5]/div[1]/div[1]/span/h6',
             )
-            self.news_list.append([date, coin, int(news.text.split(" ")[1])])
-
-        self.driver.quit()
+            self.news_list.append([date, coin, str(news.text.split(" ")[1])])
+        # self.driver.quit()
 
         return self.news_list
 
