@@ -1,95 +1,92 @@
-#%%
+# Imports
 from coindesk_scraper import CoinDeskScraper
 from yahoo_scraper import YahooScraper
 from coinmarket_scraper import CoinMarketCapScraper
 import h5py
 import numpy as np
+import cronitor
 
-#%%
-yahoo = YahooScraper()
-yahoo_data = yahoo.scrape_yahoo()
+# Set up cronjob using cronitor
+from credentials import cronitor_api
 
-cmc = CoinMarketCapScraper()
-cmc_data = cmc.scrape_coinmarketcap()
+cronitor.api_key = cronitor_api
+cronitor.Monitor.put(
+    key="web_scraping",
+    type="job",
+    schedule="9 0 * * *",  # Scrape website everyday at 9 am
+)
 
-coindesk = CoinDeskScraper()
-coindesk_data = coindesk.scrape_coindesk()
+# define function for main.py and add decorator
+@cronitor.job("web_scraping")
+def scrape_save():
+    yahoo = YahooScraper()
+    yahoo_data = yahoo.scrape_yahoo()
 
-try:
-    with h5py.File(
-        "/Users/emre/Documents/GitHub/crypto_scraping_project/ZZZ.h5", "a"
-    ) as hdf:
-        yahoo_mask = np.array(yahoo.cryptocurrencies_list)
-        hdf["yahoo_prices"].resize(
-            (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
-        )
-        hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask
+    cmc = CoinMarketCapScraper()
+    cmc_data = cmc.scrape_coinmarketcap()
 
-        cmc_mask = np.array(cmc.crypto_project_info)
-        hdf["dev_data"].resize((hdf["dev_data"].shape[0] + cmc_mask.shape[0]), axis=0)
-        hdf["dev_data"][cmc_mask.shape[0] :] = cmc_mask
+    coindesk = CoinDeskScraper()
+    coindesk_data = coindesk.scrape_coindesk()
 
-        coindesk_mask = np.array(coindesk.news_list)
-        hdf["news_data"].resize(
-            (hdf["news_data"].shape[0] + coindesk_mask.shape[0]), axis=0
-        )
-        hdf["news_data"][coindesk_mask.shape[0] :] = coindesk_mask
+    try:
+        with h5py.File(
+            "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "a"
+        ) as hdf:
+            yahoo_mask = np.array(yahoo_data)
+            hdf["yahoo_prices"].resize(
+                (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
+            )
+            hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask
 
-except:
-    with h5py.File(
-        "/Users/emre/Documents/GitHub/crypto_scraping_project/ZZZ.h5", "w"
-    ) as hdf:
-        yahoo_dataset_mask = hdf.create_dataset(
-            "yahoo_prices",
-            data=yahoo.cryptocurrencies_list,
-            maxshape=(
-                None,
-                None,
-            ),
-            chunks=True,
-        )
-        yahoo_dataset_mask.attrs["USER"] = "Emre Ertürk"
+            cmc_mask = np.array(cmc_data)
+            hdf["dev_data"].resize(
+                (hdf["dev_data"].shape[0] + cmc_mask.shape[0]), axis=0
+            )
+            hdf["dev_data"][cmc_mask.shape[0] :] = cmc_mask
 
-        cmc_dataset_mask = hdf.create_dataset(
-            "dev_data",
-            data=cmc.crypto_project_info,
-            maxshape=(
-                None,
-                None,
-            ),
-            chunks=True,
-        )
-        cmc_dataset_mask.attrs["USER"] = "Emre Ertürk"
+            coindesk_mask = np.array(coindesk_data)
+            hdf["news_data"].resize(
+                (hdf["news_data"].shape[0] + coindesk_mask.shape[0]), axis=0
+            )
+            hdf["news_data"][coindesk_mask.shape[0] :] = coindesk_mask
 
-        coindesk_dataset_mask = hdf.create_dataset(
-            "news_data",
-            data=coindesk_data,
-            maxshape=(
-                None,
-                None,
-            ),
-            chunks=True,
-        )
-        coindesk_dataset_mask.attrs["USER"] = "Emre Ertürk"
+    except:
+        with h5py.File(
+            "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "w"
+        ) as hdf:
+            yahoo_dataset_mask = hdf.create_dataset(
+                "yahoo_prices",
+                data=yahoo_data,
+                maxshape=(
+                    None,
+                    10,
+                ),
+                chunks=True,
+            )
+            yahoo_dataset_mask.attrs["USER"] = "Emre Ertürk"
 
-#%%
-with h5py.File(
-    "/Users/emre/Documents/GitHub/crypto_scraping_project/ZZZ.h5", "a"
-) as hdf:
-    yahoo_mask = np.array(yahoo.cryptocurrencies_list)
-    hdf["yahoo_prices"].resize(
-        (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
-    )
-    hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask
+            cmc_dataset_mask = hdf.create_dataset(
+                "dev_data",
+                data=cmc_data,
+                maxshape=(
+                    None,
+                    10,
+                ),
+                chunks=True,
+            )
+            cmc_dataset_mask.attrs["USER"] = "Emre Ertürk"
 
-    cmc_mask = np.array(cmc.crypto_project_info)
-    hdf["dev_data"].resize((hdf["dev_data"].shape[0] + cmc_mask.shape[0]), axis=0)
-    hdf["dev_data"][cmc_mask.shape[0] :] = cmc_mask
+            coindesk_dataset_mask = hdf.create_dataset(
+                "news_data",
+                data=coindesk_data,
+                maxshape=(
+                    None,
+                    10,
+                ),
+                chunks=True,
+            )
+            coindesk_dataset_mask.attrs["USER"] = "Emre Ertürk"
 
-    coindesk_mask = np.array(coindesk.news_list)
-    hdf["news_data"].resize(
-        (hdf["news_data"].shape[0] + coindesk_mask.shape[0]), axis=0
-    )
-    hdf["news_data"][coindesk_mask.shape[0] :] = coindesk_mask
 
-# %%
+# Execute function
+scrape_save()
