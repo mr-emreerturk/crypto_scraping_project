@@ -135,6 +135,7 @@ class CoinMarketCapScraper:
 
                 list = [
                     date,
+                    crypto,
                     github_commits.text,
                     github_stars.text,
                     github_forks.text,
