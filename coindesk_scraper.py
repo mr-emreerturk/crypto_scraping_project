@@ -5,7 +5,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import datetime
-import h5py
 import numpy as np
 
 # Global settings for the driver
@@ -50,6 +49,3 @@ class CoinDeskScraper:
         # self.driver.quit()
 
         return self.news_list
-
-
-# %%

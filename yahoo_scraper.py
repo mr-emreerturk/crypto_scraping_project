@@ -22,14 +22,6 @@ class YahooScraper:
     def scrape_yahoo(self):
         """A method that returns the body of the table from finance.yahoo.com/cryptocurrencies"""
 
-        # global cryptocurrencies_list
-        # try:
-        #     mask = pd.read_hdf('/Users/emre/Documents/GitHub/crypto_scraping_project/hdf5_data.h5')
-        #     records = mask.to_records(index=False)
-        #     cryptocurrencies_list = list(records)
-        # except:
-        #     cryptocurrencies_list = []
-
         # Checking length of table on URL
         self.driver.get("https://finance.yahoo.com/cryptocurrencies/")
         x = len(

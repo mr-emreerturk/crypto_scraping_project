@@ -49,8 +49,6 @@ class CoinMarketCapScraper:
                 )
                 self.driver.implicitly_wait(10)  # seconds
 
-                # self.driver.maximize_window()
-
                 # Not all pages have an additional layer in dynamic component. If there is no dynamic component, the try block is not needed.
                 # The try block clicks on "Social Stats"
                 try:
