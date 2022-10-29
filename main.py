@@ -1,24 +1,29 @@
-# Imports
+# Import modules
+import numpy as np
+import h5py
+import cronitor
+import os.path
+
+# Import scraper classes
 from coindesk_scraper import CoinDeskScraper
 from yahoo_scraper import YahooScraper
 from coinmarket_scraper import CoinMarketCapScraper
-import h5py
-import numpy as np
-import cronitor
 
 # Set up cronjob using cronitor
-from credentials import cronitor_api
+from credentials import cronitor_api  # Import credentials
 
-cronitor.api_key = cronitor_api
+cronitor.api_key = cronitor_api  # Setting of API key object secretly
 cronitor.Monitor.put(
-    key="web_scraping",
-    type="job",
-    schedule="9 0 * * *",  # Scrape website everyday at 9 am
+    key="web_scraping",  # Name of cronjob
+    type="job",  # Define the cron job
+    schedule="0 9 * * *",  # Scrape website everyday at 9 am
 )
 
 # define function for main.py and add decorator
 @cronitor.job("web_scraping")
 def scrape_save():
+
+    # Import scraper objects from scraper classes
     yahoo = YahooScraper()
     yahoo_data = yahoo.scrape_yahoo()
 
@@ -28,15 +33,22 @@ def scrape_save():
     coindesk = CoinDeskScraper()
     coindesk_data = coindesk.scrape_coindesk()
 
-    try:
+    # Create flag to check if H5 file alreadye exists
+    file_exists = os.path.exists(
+        "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5"
+    )
+
+    # Condition whether file already exists or not
+    if file_exists == True:  # If file does exists -> append
         with h5py.File(
             "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "a"
         ) as hdf:
-            yahoo_mask = np.array(yahoo_data)
+            yahoo_mask = np.array(yahoo_data)  # Transform data to array
+            # Resize h5 file
             hdf["yahoo_prices"].resize(
                 (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
             )
-            hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask
+            hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask  # append data
 
             cmc_mask = np.array(cmc_data)
             hdf["dev_data"].resize(
@@ -50,7 +62,7 @@ def scrape_save():
             )
             hdf["news_data"][coindesk_mask.shape[0] :] = coindesk_mask
 
-    except:
+    elif file_exists == False:  # If file does NOT exists -> create file
         with h5py.File(
             "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "w"
         ) as hdf:
