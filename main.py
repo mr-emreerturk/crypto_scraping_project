@@ -5,9 +5,9 @@ import cronitor
 import os.path
 
 # Import scraper classes
-from coindesk_scraper import CoinDeskScraper
-from yahoo_scraper import YahooScraper
-from coinmarket_scraper import CoinMarketCapScraper
+from scraper_coindesk import CoinDeskScraper
+from scraper_yahoo import YahooScraper
+from scraper_coinmarket import CoinMarketCapScraper
 
 # Set up cronjob using cronitor
 from credentials import cronitor_api  # Import credentials
