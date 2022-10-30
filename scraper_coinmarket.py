@@ -11,6 +11,10 @@ from selenium.common.exceptions import (
     StaleElementReferenceException,
 )
 import datetime
+import logging
+
+# Create logging file
+logging.basicConfig(filename="coinmarket.log", level=logging.INFO)
 
 
 # Global settings for the driver
@@ -67,7 +71,7 @@ class CoinMarketCapScraper:
                     pass
 
                 # Depending on the information available, there are multiple menus to click,
-                # determining the lenth of that block is key to find the correct X-Path for "Social Status"
+                # determining the length of that block is key to find the correct X-Path for "Social Status"
                 mask_number_of_buttons = self.driver.find_elements(
                     By.XPATH,
                     '//*[@id="__next"]/div/div[1]/div[2]/div/div[3]/div[2]/div/div[1]',
@@ -104,9 +108,9 @@ class CoinMarketCapScraper:
                     wait = WebDriverWait(self.driver, 10).until(
                         EC.presence_of_element_located((By.CLASS_NAME, "selected"))
                     )
-                except NoSuchElementException:
+                except NoSuchElementException:  # if there is only social stats, then this exception would kick in
                     pass
-                except StaleElementReferenceException:
+                except StaleElementReferenceException:  # if there was no clickable element, this exception would kick in
                     pass
 
                 date = datetime.datetime.now().strftime("%D")
@@ -155,8 +159,8 @@ class CoinMarketCapScraper:
 
                 self.crypto_project_info.append(list_new)
 
-            # Catch errarnous
+            # Catch errarnous sites
             except NoSuchElementException:
-                raise NoSuchElementException(f"{crypto.title()}")
+                logging.info(f"{crypto.title()}")
 
         return self.crypto_project_info
