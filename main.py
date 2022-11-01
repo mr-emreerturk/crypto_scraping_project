@@ -68,7 +68,7 @@ def scrape_save():
         ) as hdf:
             yahoo_dataset_mask = hdf.create_dataset(
                 "yahoo_prices",
-                data=np.array(yahoo_data),
+                data=yahoo_data,
                 maxshape=(
                     None,
                     10,
@@ -79,7 +79,7 @@ def scrape_save():
 
             cmc_dataset_mask = hdf.create_dataset(
                 "dev_data",
-                data=np.array(cmc_data),
+                data=cmc_data,
                 maxshape=(
                     None,
                     10,
@@ -90,7 +90,7 @@ def scrape_save():
 
             coindesk_dataset_mask = hdf.create_dataset(
                 "news_data",
-                data=np.array(coindesk_data),
+                data=coindesk_data,
                 maxshape=(
                     None,
                     10,
