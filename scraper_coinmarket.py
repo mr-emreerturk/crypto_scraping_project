@@ -45,7 +45,6 @@ class CoinMarketCapScraper:
             "cardano",
             "solana",
             "dogecoin",
-            "polkadot-new",
             "polygon",
             "tron",
         ]

@@ -35,7 +35,6 @@ class CoinDeskScraper:
             "cardano",
             "solana",
             "dogecoin",
-            "polkadot-new",
             "polygon",
             "tron",
         ]
