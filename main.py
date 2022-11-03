@@ -48,19 +48,19 @@ def scrape_save():
             hdf["yahoo_prices"].resize(
                 (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
             )
-            hdf["yahoo_prices"][yahoo_mask.shape[0] :] = yahoo_mask  # append data
+            hdf["yahoo_prices"][-yahoo_mask.shape[0] :] = yahoo_mask  # append data
 
             cmc_mask = np.array(cmc_data)
             hdf["dev_data"].resize(
                 (hdf["dev_data"].shape[0] + cmc_mask.shape[0]), axis=0
             )
-            hdf["dev_data"][cmc_mask.shape[0] :] = cmc_mask
+            hdf["dev_data"][-cmc_mask.shape[0] :] = cmc_mask
 
             coindesk_mask = np.array(coindesk_data)
             hdf["news_data"].resize(
                 (hdf["news_data"].shape[0] + coindesk_mask.shape[0]), axis=0
             )
-            hdf["news_data"][coindesk_mask.shape[0] :] = coindesk_mask
+            hdf["news_data"][-coindesk_mask.shape[0] :] = coindesk_mask
 
     elif file_exists == False:  # If file does NOT exists -> create file
         with h5py.File(
@@ -71,7 +71,7 @@ def scrape_save():
                 data=yahoo_data,
                 maxshape=(
                     None,
-                    10,
+                    1000,
                 ),
                 chunks=True,
             )
@@ -82,7 +82,7 @@ def scrape_save():
                 data=cmc_data,
                 maxshape=(
                     None,
-                    10,
+                    1000,
                 ),
                 chunks=True,
             )
@@ -93,7 +93,7 @@ def scrape_save():
                 data=coindesk_data,
                 maxshape=(
                     None,
-                    10,
+                    1000,
                 ),
                 chunks=True,
             )
