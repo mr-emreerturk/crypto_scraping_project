@@ -28,11 +28,12 @@ chrome_options.add_argument(
 class Scrapers:
     def __init__(self):
         super().__init__()
+        # Initializing web driver
         self.driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),
             chrome_options=chrome_options,
         )
-        self.top_crypto = [
+        self.top_crypto = [  # Crypto currencies of interest
             "bitcoin",
             "ethereum",
             "tether",
@@ -46,6 +47,7 @@ class Scrapers:
             "polygon",
             "tron",
         ]
+        # empty lists for methods
         self.cryptocurrencies_list = []
         self.crypto_project_info = []
         self.news_list = []
@@ -92,6 +94,8 @@ class Scrapers:
         return self.cryptocurrencies_list
 
     def scrape_coinmarketcap(self):
+        """A method that returns the body of the table from coinmarketcap.com"""
+
         for crypto in self.top_crypto:
             try:
                 self.driver.get(
@@ -195,9 +199,9 @@ class Scrapers:
                     reddit_members.text,
                 ]
 
-                list_new = [n.replace(",", "") for n in list]
+                list_new = [n.replace(",", "") for n in list]  # Drop commas from texts
 
-                self.crypto_project_info.append(list_new)
+                self.crypto_project_info.append(list_new)  # Append to target list
 
             # Catch errarnous sites
             except NoSuchElementException:
@@ -206,6 +210,8 @@ class Scrapers:
         return self.crypto_project_info
 
     def scrape_coindesk(self):
+        """A method that returns the body of the table from coindesk.com"""
+
         for crypto in self.top_crypto:
 
             self.driver.get(f"https://www.coindesk.com/search?s={crypto}&df=24")
@@ -215,6 +221,8 @@ class Scrapers:
                 By.XPATH,
                 '//*[@id="queryly_advanced_container"]/div[5]/div[1]/div[1]/span/h6',
             )
+            # The news string consists of multiple words.
+            # The second string is the targeted number, that's why the string is splitted.
             self.news_list.append([date, coin, str(news.text.split(" ")[1])])
         # self.driver.quit()
 
