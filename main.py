@@ -1,13 +1,8 @@
 # Import modules
-import numpy as np
-import h5py
 import cronitor
 import os.path
-
-# Import scraper classes
-from scraper_coindesk import CoinDeskScraper
-from scraper_yahoo import YahooScraper
-from scraper_coinmarket import CoinMarketCapScraper
+from operations_h5 import Saving_to_h5
+from scrapers import Scrapers
 
 # Set up cronjob using cronitor
 from credentials import cronitor_api  # Import credentials
@@ -23,81 +18,27 @@ cronitor.Monitor.put(
 @cronitor.job("web_scraping")
 def scrape_save():
 
-    # Import scraper objects from scraper classes
-    yahoo = YahooScraper()
-    yahoo_data = yahoo.scrape_yahoo()
+    scraper = Scrapers()  # Assign scraper object from scraper class
 
-    cmc = CoinMarketCapScraper()
-    cmc_data = cmc.scrape_coinmarketcap()
+    yahoo_data = scraper.scrape_yahoo()  # Call Yahoo scraper method
+    cmc_data = scraper.scrape_coinmarketcap()  # Call Coinmarketcap scraper method
+    coindesk_data = scraper.scrape_coindesk()  # Call Coindesk scraper method
 
-    coindesk = CoinDeskScraper()
-    coindesk_data = coindesk.scrape_coindesk()
+    # Assign operations object to operation class
+    operations = Saving_to_h5()
 
     # Create flag to check if H5 file alreadye exists
-    file_exists = os.path.exists(
-        "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5"
-    )
+    file_exists = os.path.exists("data.h5")
 
     # Condition whether file already exists or not
     if file_exists == True:  # If file does exists -> append
-        with h5py.File(
-            "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "a"
-        ) as hdf:
-            yahoo_mask = np.array(yahoo_data)  # Transform data to array
-            # Resize h5 file
-            hdf["yahoo_prices"].resize(
-                (hdf["yahoo_prices"].shape[0] + yahoo_mask.shape[0]), axis=0
-            )
-            hdf["yahoo_prices"][-yahoo_mask.shape[0] :] = yahoo_mask  # append data
-
-            cmc_mask = np.array(cmc_data)
-            hdf["dev_data"].resize(
-                (hdf["dev_data"].shape[0] + cmc_mask.shape[0]), axis=0
-            )
-            hdf["dev_data"][-cmc_mask.shape[0] :] = cmc_mask
-
-            coindesk_mask = np.array(coindesk_data)
-            hdf["news_data"].resize(
-                (hdf["news_data"].shape[0] + coindesk_mask.shape[0]), axis=0
-            )
-            hdf["news_data"][-coindesk_mask.shape[0] :] = coindesk_mask
+        operations.append_to_h5(yahoo_data, cmc_data, coindesk_data)
 
     elif file_exists == False:  # If file does NOT exists -> create file
-        with h5py.File(
-            "/Users/emre/Documents/GitHub/crypto_scraping_project/data.h5", "w"
-        ) as hdf:
-            yahoo_dataset_mask = hdf.create_dataset(
-                "yahoo_prices",
-                data=yahoo_data,
-                maxshape=(
-                    None,
-                    1000,
-                ),
-                chunks=True,
-            )
-            yahoo_dataset_mask.attrs["USER"] = "Emre Ertürk"
+        operations.create_h5(yahoo_data, cmc_data, coindesk_data)
 
-            cmc_dataset_mask = hdf.create_dataset(
-                "dev_data",
-                data=cmc_data,
-                maxshape=(
-                    None,
-                    1000,
-                ),
-                chunks=True,
-            )
-            cmc_dataset_mask.attrs["USER"] = "Emre Ertürk"
-
-            coindesk_dataset_mask = hdf.create_dataset(
-                "news_data",
-                data=coindesk_data,
-                maxshape=(
-                    None,
-                    1000,
-                ),
-                chunks=True,
-            )
-            coindesk_dataset_mask.attrs["USER"] = "Emre Ertürk"
+    else:
+        raise Exception("The file exist flag is ambigous")
 
 
 # Execute function
