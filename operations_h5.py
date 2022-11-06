@@ -7,6 +7,13 @@ class Saving_to_h5:
         pass
 
     def create_h5(self, yahoo_data, cmc_data, coindesk_data):
+        """This method creates a new h5 dataset
+
+        Args:
+            yahoo_data (list): add scraped data from finance.yahoo.com
+            cmc_data (list): add scraped data from coinmarketcap.com
+            coindesk_data (list): add scraped data from coindesk.com
+        """
 
         with h5py.File("data.h5", "w") as hdf:
             yahoo_dataset_mask = hdf.create_dataset(
@@ -55,6 +62,13 @@ class Saving_to_h5:
             coindesk_dataset_mask.attrs["USER"] = "Emre Ertürk"
 
     def append_to_h5(self, yahoo_data, cmc_data, coindesk_data):
+        """This method appends data to an existing h5 dataset
+
+        Args:
+            yahoo_data (list): add scraped data from finance.yahoo.com
+            cmc_data (list): add scraped data from coinmarketcap.com
+            coindesk_data (list): add scraped data from coindesk.com
+        """
         # Condition whether file already exists or not
         with h5py.File("data.h5", "a") as hdf:
             yahoo_mask = np.array(yahoo_data)  # Transform data to array

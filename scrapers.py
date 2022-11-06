@@ -149,7 +149,7 @@ class Scrapers:
                     # clicking on "Social Status"
                     WebDriverWait(self.driver, timeout=5)
                     element.click()
-                    wait = WebDriverWait(self.driver, 10).until(
+                    WebDriverWait(self.driver, 10).until(
                         EC.presence_of_element_located((By.CLASS_NAME, "selected"))
                     )
                 except NoSuchElementException:  # if there is only social stats, then this exception would kick in
