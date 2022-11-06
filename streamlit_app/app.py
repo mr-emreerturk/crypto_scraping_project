@@ -1,8 +1,4 @@
 import streamlit as st
-import yfinance as yf
-import pandas as pd
-import cufflinks as cf
-import datetime
 import pandas as pd
 import plotly.express as px
 from streamlit_functions import interactive_plot
@@ -28,7 +24,7 @@ with st.sidebar:
     visit this repo 👉 [click here](https://github.com/mr-emreerturk/crypto_scraping_project) \n
     **Credits**
     - App built by [Emre Ertürk](https://www.linkedin.com/in/mr-emre-erturk/)
-    - Built in `Python` using `streamlit`,`pandas`, `cufflinks`, and `datetime`
+    - Built in `Python` using `streamlit`,`pandas`, `plotly.express`, and `selenium`
     """
     )
     st.write("---")
@@ -41,7 +37,15 @@ with st.sidebar:
         )
 
 ### --- DISPLAY LINECHART OF CHOSEN CRYPTO
+# TODO: Add crypto logo next to header
 st.header(f"{crypto_selected}-Dashboard")
+with st.expander("If no data is displayed"):
+    st.markdown(
+        """
+        During the scraping process some values were retrieved as **NaN**.
+        These could not be filtered as other valuable information would be lost. Please excuse the inconvenience.
+        """
+    )
 
 interactive_plot(df, crypto_selected)
 
