@@ -3,9 +3,8 @@ venv
 urls.csv
 credentials.py
 testing.ipynb
-scraper_coindesk.py
-scraper_coinmarket.py
-scraper_yahoo.py
+.vscode
+Pipfile
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
