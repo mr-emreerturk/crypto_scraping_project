@@ -7,13 +7,20 @@ import pandas as pd
 import plotly.express as px
 from streamlit_functions import interactive_plot
 
+### --- READ CLEANED DATA
+df = pd.read_csv(
+    "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/cleaned_data.csv"
+)
+
 ### --- CREATE SIDEBAR WITH HEADER AND SELECTBOX
 with st.sidebar:
     st.header("Crypto Price & Dev App")
     ticker_list = pd.read_csv(
         "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.txt"
-    )
-    crypto_selected = st.selectbox("Select the crypto of your choice:", ticker_list)
+    )  # Read Ticker List
+    crypto_selected = st.selectbox(
+        "Select the crypto of your choice:", ticker_list
+    )  # Create Selectbox
     st.markdown(
         """
     This application shows the result of a web-scraping project where different data was 
@@ -25,9 +32,7 @@ with st.sidebar:
     """
     )
     st.write("---")
-    # Selectbox
-
-    with st.expander("More Information"):
+    with st.expander("Additional Information"):  # Add additional information
         st.markdown(
             """
         The data was retrieved from **November 1st, 2022 to November 7th 2022**. As part of the scraping project, this dashboard 
@@ -37,21 +42,18 @@ with st.sidebar:
 
 ### --- DISPLAY LINECHART OF CHOSEN CRYPTO
 st.header(f"{crypto_selected}-Dashboard")
-df = pd.read_csv(
-    "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/cleaned_data.csv"
-)
+
 interactive_plot(df, crypto_selected)
 
 ### --- CREATE DATAFRAME TABS
 tab1, tab2 = st.tabs(["Avg. Data", "Raw Data"])
 
 with tab1:
-    ### --- LOAD Grouped Data Frame
+    ### --- LOAD GROUPED DATAFRAME
     df_mean = df.groupby(by="name").mean()
     st.dataframe(df_mean)
 with tab2:
-    # start_date = st.sidebar.date_input("Start date", datetime.date(2022, 11, 1))
-    # end_date = st.sidebar.date_input("End date", datetime.date(2021, 11, 6))
+    ### --- LOAD RAW DATAFRAME
     st.dataframe(df)
 
 st.write("---")
