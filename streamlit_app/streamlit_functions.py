@@ -6,7 +6,7 @@ import requests
 from io import BytesIO
 
 ticker_list = pd.read_csv(
-    "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.txt"
+    "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.csv"
 )  # Read Ticker List
 
 

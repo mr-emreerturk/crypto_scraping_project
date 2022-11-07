@@ -23,7 +23,7 @@ df = pd.read_csv(
 with st.sidebar:
     st.header("Crypto Price & Dev App")
     ticker_list = pd.read_csv(
-        "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.txt"
+        "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.csv"
     )  # Read Ticker List
     crypto_selected_sidebar = st.selectbox(
         "Select the crypto of your choice:", ticker_list
