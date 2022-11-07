@@ -67,7 +67,7 @@ def interactive_plot(df, crypto):
         labels={
             "date": x_axis_val.title(),
             f"{y_axis_val}": formatted_y_axis,
-            "name": "Name",
+            "name": "Cryptocurrency",
         },
     )
     fig.update_layout(  # update background to white
