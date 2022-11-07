@@ -6,6 +6,10 @@
 
 This project aims at gathering data from publically available crypto currency websites. Going beyond the scope of mere price tracking, the data retrieved aims to give an insight of which cryptocurrency has the biggest developer/fan community, biggest marketcaps, and overall tendencies.
 
+## Dashboard/EDA
+
+The dashboard and respective (EDA) is found on this streamlit.app 👉 [click here](https://mr-emreerturk-crypto-scraping-project-streamlit-appapp-gdnpf0.streamlit.app/)
+
 ### Partner
 
 - IU International University of Applied Science
