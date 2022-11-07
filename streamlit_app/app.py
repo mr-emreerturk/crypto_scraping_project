@@ -1,8 +1,19 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from streamlit_functions import interactive_plot
+from streamlit_functions import interactive_plot, add_logo
 
+st.set_page_config(
+    page_title="Crypto Price & Dev App",
+    page_icon="💰",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        "Get Help": "https://www.extremelycoolapp.com/help",
+        "Report a bug": "https://www.extremelycoolapp.com/bug",
+        "About": "# This is a header. This is an *extremely* cool app!",
+    },
+)
 ### --- READ CLEANED DATA
 df = pd.read_csv(
     "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/cleaned_data.csv"
@@ -14,7 +25,7 @@ with st.sidebar:
     ticker_list = pd.read_csv(
         "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.txt"
     )  # Read Ticker List
-    crypto_selected = st.selectbox(
+    crypto_selected_sidebar = st.selectbox(
         "Select the crypto of your choice:", ticker_list
     )  # Create Selectbox
     st.markdown(
@@ -37,17 +48,25 @@ with st.sidebar:
         )
 
 ### --- DISPLAY LINECHART OF CHOSEN CRYPTO
-# TODO: Add crypto logo next to header
-st.header(f"{crypto_selected}-Dashboard")
-with st.expander("If no data is displayed"):
-    st.markdown(
-        """
-        During the scraping process some values were retrieved as **NaN**.
-        These could not be filtered as other valuable information would be lost. Please excuse the inconvenience.
-        """
-    )
 
-interactive_plot(df, crypto_selected)
+col1, col2 = st.columns([5, 1])
+with col1:
+    st.header(f"{crypto_selected_sidebar}-Dashboard")
+    with st.expander("If no data is displayed"):
+        st.markdown(
+            """
+            During the scraping process some values were retrieved as **NaN**.
+            These could not be filtered as other valuable information would be lost.
+            See the raw dataframe at the bottom of this page.
+            Please excuse the inconvenience.
+            """
+        )
+
+with col2:
+    add_logo(crypto_selected_sidebar)
+st.write("---")
+
+interactive_plot(df, crypto_selected_sidebar)
 
 ### --- CREATE DATAFRAME TABS
 tab1, tab2 = st.tabs(["Avg. Data", "Raw Data"])
@@ -59,5 +78,3 @@ with tab1:
 with tab2:
     ### --- LOAD RAW DATAFRAME
     st.dataframe(df)
-
-st.write("---")
