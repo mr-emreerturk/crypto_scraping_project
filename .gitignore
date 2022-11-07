@@ -5,6 +5,7 @@ credentials.py
 testing.ipynb
 .vscode
 Pipfile
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
