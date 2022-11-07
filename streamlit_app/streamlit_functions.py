@@ -12,7 +12,7 @@ ticker_list = pd.read_csv(
 
 def add_logo(crypto):
     crypto_selected_sidebar = str(crypto).lower()  # Convert to string
-    url = f"https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_logos/{crypto_selected_sidebar}.jpeg"
+    url = f"https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_logos/{crypto_selected_sidebar}.png"
 
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
