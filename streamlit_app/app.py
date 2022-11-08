@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from streamlit_functions import interactive_plot, add_logo
+from streamlit_functions import interactive_plot, add_logo, add_bar_chart, add_pie_chart
 
 st.set_page_config(
     page_title="Crypto Price & Dev App",
@@ -21,13 +21,13 @@ df = pd.read_csv(
 
 ### --- CREATE SIDEBAR WITH HEADER AND SELECTBOX
 with st.sidebar:
-    st.header("Crypto Price & Dev App")
-    ticker_list = pd.read_csv(
-        "https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_list.csv"
-    )  # Read Ticker List
-    crypto_selected_sidebar = st.selectbox(
-        "Select the crypto of your choice:", ticker_list
-    )  # Create Selectbox
+    st.title("Crypto Price & Dev App")
+    df_copy = df["name"].drop_duplicates()
+    ticker_list = [x.upper() for x in df_copy]
+    crypto_selected_sidebar = st.selectbox(  # Create Selectbox
+        "Select the crypto of your choice:",
+        ticker_list,
+    )
     st.markdown(
         """
     This application shows the result of a web-scraping project where different data was 
@@ -48,10 +48,9 @@ with st.sidebar:
         )
 
 ### --- DISPLAY LINECHART OF CHOSEN CRYPTO
-
-col1, col2 = st.columns([5, 1])
+col1, col2 = st.columns([4, 1])
 with col1:
-    st.header(f"{crypto_selected_sidebar}-Dashboard")
+    st.title(f"{crypto_selected_sidebar}-Dashboard")
     with st.expander("If no data is displayed"):
         st.markdown(
             """
@@ -64,17 +63,25 @@ with col1:
 
 with col2:
     add_logo(crypto_selected_sidebar)
-st.write("---")
 
+### --- CREATE FIRST VISUALIZATIONS
 interactive_plot(df, crypto_selected_sidebar)
 
-### --- CREATE DATAFRAME TABS
-tab1, tab2 = st.tabs(["Avg. Data", "Raw Data"])
+y_axis_val = st.select_slider("Select feature:", options=df.columns[3:])
+col1, col2 = st.columns([1, 1])
+with col1:
+    add_bar_chart(df, y_axis_val)
+with col2:
+    add_pie_chart(df, y_axis_val)
 
+
+### --- CREATE DATAFRAME TABS
+st.header("Data from the web scrapers")
+tab1, tab2 = st.tabs(["Avg. Data", "Raw Data"])
 with tab1:
+    ### --- LOAD RAW DATAFRAME
+    st.dataframe(df)
+with tab2:
     ### --- LOAD GROUPED DATAFRAME
     df_mean = df.groupby(by="name").mean()
     st.dataframe(df_mean)
-with tab2:
-    ### --- LOAD RAW DATAFRAME
-    st.dataframe(df)
