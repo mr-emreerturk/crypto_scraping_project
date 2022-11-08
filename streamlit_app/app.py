@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 from streamlit_functions import interactive_plot, add_logo, add_bar_chart, add_pie_chart
 
+### --- SET CONFIGURATION
 st.set_page_config(
     page_title="Crypto Price & Dev App",
     page_icon="💰",
@@ -50,7 +51,7 @@ with st.sidebar:
 ### --- DISPLAY LINECHART OF CHOSEN CRYPTO
 col1, col2 = st.columns([4, 1])
 with col1:
-    st.title(f"{crypto_selected_sidebar}-Dashboard")
+    st.title(f'"{crypto_selected_sidebar}"-Dashboard')
     with st.expander("If no data is displayed"):
         st.markdown(
             """
@@ -77,7 +78,7 @@ with col2:
 
 ### --- CREATE DATAFRAME TABS
 st.header("Data from the web scrapers")
-tab1, tab2 = st.tabs(["Avg. Data", "Raw Data"])
+tab1, tab2 = st.tabs(["Raw Data", "Pivot Table (AVG)"])
 with tab1:
     ### --- LOAD RAW DATAFRAME
     st.dataframe(df)
