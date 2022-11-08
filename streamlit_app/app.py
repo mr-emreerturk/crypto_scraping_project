@@ -86,3 +86,10 @@ with tab2:
     ### --- LOAD GROUPED DATAFRAME
     df_mean = df.groupby(by="name").mean()
     st.dataframe(df_mean)
+
+### --- DOWNLOAD CSV
+st.download_button(
+    label="Download raw data as CSV",
+    data="streamlit_app/cleaned_data.csv",
+    file_name="raw_data_webscrapers.csv",
+)
