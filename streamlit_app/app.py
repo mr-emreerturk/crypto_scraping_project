@@ -23,8 +23,10 @@ df = pd.read_csv(
 ### --- CREATE SIDEBAR WITH HEADER AND SELECTBOX
 with st.sidebar:
     st.title("Crypto Price & Dev App")
-    df_copy = df["name"].drop_duplicates()
-    ticker_list = [x.upper() for x in df_copy]
+    df_copy = df[
+        "name"
+    ].drop_duplicates()  # Create Series of all Cryptocurrencies in data
+    ticker_list = [x.upper() for x in df_copy]  # Create list of all UPPER names
     crypto_selected_sidebar = st.selectbox(  # Create Selectbox
         "Select the crypto of your choice:",
         ticker_list,
@@ -48,7 +50,7 @@ with st.sidebar:
         """
         )
 
-### --- DISPLAY LINECHART OF CHOSEN CRYPTO
+### --- DISPLAY LINECHART OF CHOSEN CRYPTOCURRENCIES
 col1, col2 = st.columns([4, 1])
 with col1:
     st.title(f'"{crypto_selected_sidebar}"-Dashboard')
@@ -61,20 +63,19 @@ with col1:
             Please excuse the inconvenience.
             """
         )
-
 with col2:
     add_logo(crypto_selected_sidebar)
 
-### --- CREATE FIRST VISUALIZATIONS
+### --- CREATE FIRST VISUALIZATIONS: LINECHART
 interactive_plot(df, crypto_selected_sidebar)
 
+### --- CREATE ADDITIONAL VIZUALISATION: BARCHART & PIECHART
 y_axis_val = st.select_slider("Select feature:", options=df.columns[3:])
 col1, col2 = st.columns([1, 1])
 with col1:
     add_bar_chart(df, y_axis_val)
 with col2:
     add_pie_chart(df, y_axis_val)
-
 
 ### --- CREATE DATAFRAME TABS
 st.header("Data from the web scrapers")

@@ -11,9 +11,15 @@ ticker_list = pd.read_csv(
 
 
 def add_logo(crypto):
+    """A function which reads and prints the logo of respective cryptocurrency into the dashboard
+
+    Args:
+        crypto (string): Cryptocurrency selected in sidebar
+    """
     crypto_selected_sidebar = str(crypto).lower()  # Convert to string
     url = f"https://raw.githubusercontent.com/mr-emreerturk/crypto_scraping_project/main/streamlit_app/crypto_logos/{crypto_selected_sidebar}.png"
 
+    # Read image file
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
     st.image(img)
@@ -38,9 +44,11 @@ def interactive_plot(df, crypto):
         ticker_list = df_copy[df.name.isin([crypto_selected_sidebar]) != True]
         ticker_list_2 = [x.upper() for x in ticker_list]
 
-        extra_crypto = st.multiselect(
-            "Compare to another crypto:",
-            ticker_list_2,
+        extra_crypto = (
+            st.multiselect(  # Selectbox of additional cryptocurrencies selected by user
+                "Compare to another crypto:",
+                ticker_list_2,
+            )
         )
         mask_list = [x.lower() for x in extra_crypto]
 
@@ -63,7 +71,7 @@ def interactive_plot(df, crypto):
         x=x_axis_val,
         y=y_axis_val,
         color="name",
-        title=f"What are the changes in '{formatted_y_axis}' from Nov 1st to Nov7th?",
+        title=f"What are the changes in '{formatted_y_axis}' from Nov 1st,2022 to Nov 7th,2022?",
         template="plotly_white",
         markers=True,
         labels={
@@ -88,6 +96,12 @@ def interactive_plot(df, crypto):
 
 
 def add_bar_chart(df, y_axis_val):
+    """A method that prints a bar chart made in plotly.express to dashboard.
+
+    Args:
+        df (dataframe): Dataframe
+        y_axis_val (_type_): y name
+    """
     x_axis_val = "name"
     if "_" in y_axis_val:  # Replace "_" with whitespace " "
         mask = y_axis_val[:].replace("_", " ")
@@ -118,6 +132,12 @@ def add_bar_chart(df, y_axis_val):
 
 
 def add_pie_chart(df, pie_values):
+    """A method that prints a bar chart made in plotly.express to dashboard.
+
+    Args:
+        df (dataframe): Dataframe
+        pie_values (_type_): variable name
+    """
     pie_names = "name"
     fig = px.pie(
         df,
